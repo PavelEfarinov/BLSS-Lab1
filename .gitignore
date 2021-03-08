@@ -29,3 +29,5 @@ build/
 
 ### VS Code ###
 .vscode/
+database_data_generation/venv
+database_data_generation/__pycache__
