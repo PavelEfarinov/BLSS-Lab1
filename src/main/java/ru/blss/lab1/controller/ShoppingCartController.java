@@ -3,6 +3,7 @@ package ru.blss.lab1.controller;
 import org.springframework.web.bind.annotation.*;
 import ru.blss.lab1.domain.ShoppingCart;
 import ru.blss.lab1.domain.StoreItem;
+import ru.blss.lab1.domain.User;
 import ru.blss.lab1.service.ShoppingCartService;
 
 @RestController
@@ -23,6 +24,11 @@ public class ShoppingCartController {
     @PostMapping("cart/remove")
     public void removeItem(@RequestBody ShoppingCartRequestDTO request) {
         shoppingCartService.RemoveItemFromCart(request.cart, request.item);
+    }
+
+    @PostMapping("cart/new")
+    public void createCart(User user) {
+        shoppingCartService.CreateNewShoppingCart(user);
     }
 
     static class ShoppingCartRequestDTO
