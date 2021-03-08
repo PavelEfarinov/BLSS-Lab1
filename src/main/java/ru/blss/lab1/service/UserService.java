@@ -26,7 +26,7 @@ public class UserService {
         user.setSurname(userRegisterCredentials.getSurname());
         user.setEmail(userRegisterCredentials.getEmail());
         userRepository.save(user);
-        userRepository.updatePasswordSha(user.getId(), user.getLogin(), userRegisterCredentials.getPassword());
+        userRepository.updatePassword(user.getId(), userRegisterCredentials.getPassword());
     }
 
     public List<User> findAll() {

@@ -22,6 +22,10 @@ public class User {
 
     @NotNull
     @NotEmpty
+    private String password;
+
+    @NotNull
+    @NotEmpty
     @Size(min = 1, max = 100)
     private String name;
 
