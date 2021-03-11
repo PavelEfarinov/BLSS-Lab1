@@ -24,12 +24,6 @@ public class UserRegisterCredentials extends UserCredentials {
     @Pattern(regexp = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", message = "Incorrect email")
     private String email;
 
-    @NotNull
-    @NotEmpty
-    @Size(min = 2, max = 100)
-    @Pattern(regexp = "[a-z0-9 A-Zа-яА-Я№]+", message = "Incorrect organisation name provided")
-    private String organisation;
-
     public String getName() {
         return name;
     }
@@ -40,9 +34,5 @@ public class UserRegisterCredentials extends UserCredentials {
 
     public String getEmail() {
         return email;
-    }
-
-    public String getOrganisation() {
-        return organisation;
     }
 }
