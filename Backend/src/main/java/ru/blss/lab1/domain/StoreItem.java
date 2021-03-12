@@ -11,7 +11,7 @@ import javax.validation.constraints.NotEmpty;
 public class StoreItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Id;
+    private long Id;
 
     @NotNull
     @NotEmpty
@@ -25,11 +25,11 @@ public class StoreItem {
     @Min(0)
     private int CurrentlyAvailable;
 
-    public int getId() {
+    public long getId() {
         return Id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         Id = id;
     }
 

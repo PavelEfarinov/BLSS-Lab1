@@ -5,20 +5,19 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 import ru.blss.lab1.domain.StoreItem;
-import ru.blss.lab1.domain.User;
 
 public interface StoreItemRepository extends JpaRepository<StoreItem, Long> {
     @Query(value = "SELECT currently_available from store_item where id = ?1", nativeQuery = true)
-    int getCurrentlyAvailableById(int id);
+    @Transactional
+    int getCurrentlyAvailableById(long id);
 
-    @Query(value = "UPDATE store_item  where id = ?1 set currently_available = currently_available - 1",nativeQuery = true)
+    @Query(value = "UPDATE store_item set currently_available = currently_available - 1 where id = ?1 ", nativeQuery = true)
     @Modifying
     @Transactional
-    int takeStoreItem(int id);
+    void takeStoreItem(long id);
 
-    @Query(value = "UPDATE store_item  where id = ?1 set currently_available = currently_available + 1",nativeQuery = true)
+    @Query(value = "UPDATE store_item set currently_available = currently_available + 1 where id = ?1", nativeQuery = true)
     @Modifying
     @Transactional
-    int addStoreItem(int id);
-
+    void addStoreItem(long id);
 }

@@ -1,14 +1,18 @@
 package ru.blss.lab1.controller;
 
-import org.springframework.web.bind.annotation.*;
-import ru.blss.lab1.domain.ShoppingCart;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.blss.lab1.domain.StoreItem;
 import ru.blss.lab1.domain.User;
 import ru.blss.lab1.service.ShoppingCartService;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/api/1")
-public class ShoppingCartController {
+public class ShoppingCartController extends ApiController {
 
     ShoppingCartService shoppingCartService;
 
@@ -17,39 +21,14 @@ public class ShoppingCartController {
     }
 
     @PostMapping("cart/add")
-    public void addItem(@RequestBody ShoppingCartRequestDTO request) {
-        shoppingCartService.AddItemToCart(request.cart, request.item);
+    public void addItem(HttpServletRequest request, @RequestBody StoreItem item) {
+        User user = getUser(request);
+        shoppingCartService.AddItemToCart(user, item);
     }
 
     @PostMapping("cart/remove")
-    public void removeItem(@RequestBody ShoppingCartRequestDTO request) {
-        shoppingCartService.RemoveItemFromCart(request.cart, request.item);
-    }
-
-    @PostMapping("cart/new")
-    public void createCart(User user) {
-        shoppingCartService.CreateNewShoppingCart(user);
-    }
-
-    static class ShoppingCartRequestDTO
-    {
-        private ShoppingCart cart;
-        private StoreItem item;
-
-        public ShoppingCart getCart() {
-            return cart;
-        }
-
-        public void setCart(ShoppingCart cart) {
-            this.cart = cart;
-        }
-
-        public StoreItem getItem() {
-            return item;
-        }
-
-        public void setItem(StoreItem item) {
-            this.item = item;
-        }
+    public void removeItem(HttpServletRequest request, @RequestBody StoreItem item) {
+        User user = getUser(request);
+        shoppingCartService.RemoveItemFromCart(user, item);
     }
 }
