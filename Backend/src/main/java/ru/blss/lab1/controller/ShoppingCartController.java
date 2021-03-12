@@ -1,14 +1,19 @@
 package ru.blss.lab1.controller;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.blss.lab1.domain.ShoppingCart;
 import ru.blss.lab1.domain.StoreItem;
 import ru.blss.lab1.domain.User;
 import ru.blss.lab1.service.ShoppingCartService;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/api/1")
-public class ShoppingCartController {
+public class ShoppingCartController extends ApiController {
 
     ShoppingCartService shoppingCartService;
 
@@ -27,12 +32,12 @@ public class ShoppingCartController {
     }
 
     @PostMapping("cart/new")
-    public void createCart(User user) {
+    public void createCart(HttpServletRequest httpServletRequest) {
+        User user = getUser(httpServletRequest);
         shoppingCartService.CreateNewShoppingCart(user);
     }
 
-    static class ShoppingCartRequestDTO
-    {
+    static class ShoppingCartRequestDTO {
         private ShoppingCart cart;
         private StoreItem item;
 

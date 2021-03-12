@@ -35,6 +35,7 @@ public class ShoppingCartService {
 
     public void CreateNewShoppingCart(User user) {
         ShoppingCart cart = new ShoppingCart();
+        shoppingCartRepository.save(cart);
         cart.setOwner(user);
         shoppingCartRepository.save(cart);
     }

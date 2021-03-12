@@ -7,10 +7,11 @@ import java.util.List;
 @Table(name = "shopping_cart")
 public class ShoppingCart {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
 
-    @ManyToOne
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "id")
     private User Owner;
 
     @ManyToMany
