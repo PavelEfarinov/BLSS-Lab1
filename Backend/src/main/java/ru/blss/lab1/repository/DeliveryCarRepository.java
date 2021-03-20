@@ -12,12 +12,12 @@ public interface DeliveryCarRepository extends JpaRepository<DeliveryCarFlight, 
     @Query(value = "UPDATE delivery_car where id = ?0 set arrival_time = ?1", nativeQuery = true)
     @Modifying
     @Transactional
-    int changeArrivalTime(long id, Timestamp time);
+    int updateArrivalTime(long id, Timestamp time);
 
     @Query(value = "UPDATE delivery_car where id = ?0 set departure_time = ?1", nativeQuery = true)
     @Modifying
     @Transactional
-    int changeDepartureTime(long id, Timestamp time);
+    int updateDepartureTime(long id, Timestamp time);
 
 
 }
