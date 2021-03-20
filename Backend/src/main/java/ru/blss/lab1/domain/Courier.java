@@ -1,6 +1,8 @@
 package ru.blss.lab1.domain;
 
+import java.util.List;
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
@@ -12,19 +14,15 @@ public class Courier {
     @Id
     private long id;
 
-    private String address;
-
-    private Date deliveryDate;
-
-    @NotNull
-    @NotEmpty
-    @Column(columnDefinition = "varchar(255) default 'free'")
-    private String status;
+    @Max(5)
+    private double rating;
 
     @OneToOne
     @MapsId
     @JoinColumn(name = "id")
     private User user;
+
+    public Courier(){}
 
     public User getUser() {
         return user;
@@ -34,36 +32,20 @@ public class Courier {
         this.user = user;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Date getDeliveryDate() {
-        return deliveryDate;
+    public double getRate() {
+        return rating;
     }
 
-    public void setDeliveryDate(Date deliveryDate) {
-        this.deliveryDate = deliveryDate;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
 }

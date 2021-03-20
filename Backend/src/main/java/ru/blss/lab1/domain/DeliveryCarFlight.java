@@ -21,8 +21,10 @@ public class DeliveryCarFlight {
     @NotEmpty
     private Timestamp departure_time;
 
-    @OneToOne
+    @ManyToOne
     private Courier courier;
+
+    public DeliveryCarFlight(){}
 
     public long getId() {
         return id;
