@@ -1,5 +1,6 @@
 package ru.blss.lab1.controller;
 
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,11 +8,12 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.blss.lab1.domain.*;
 import ru.blss.lab1.service.DeliveryService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 
 @RestController
 @RequestMapping("/api/1")
-public class DeliveryController {
+public class DeliveryController extends ApiController{
     private DeliveryService deliveryService;
 
     public DeliveryController(DeliveryService deliveryService) {
@@ -19,8 +21,8 @@ public class DeliveryController {
     }
 
     @PostMapping("courier")
-    public void upgradeToCourierRole(@RequestBody User user) {
-        deliveryService.giveCourierRole(user);
+    public void upgradeToCourierRole(HttpServletRequest request) {
+        deliveryService.giveCourierRole(getUser(request));
     }
 
     @PostMapping("courier/orders/choose")
