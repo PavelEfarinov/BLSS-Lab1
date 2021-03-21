@@ -50,7 +50,7 @@ public class DeliveryService {
 
     public void giveCourierRole(User user){
         Courier courier = new Courier();
-        courier.setId(user.getId());
+        courier.setUser(user);
         courierRepository.save(courier);
     }
 
