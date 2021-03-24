@@ -15,6 +15,10 @@ public abstract class ApiController {
     @ModelAttribute
     public User getUser(HttpServletRequest httpServletRequest) {
         User requestUser = (User) httpServletRequest.getAttribute("user");
-        return userRepository.getOne(requestUser.getId());
+        if(requestUser != null) {
+            return userRepository.getOne(requestUser.getId());
+        }
+        // If the user is null => login request, or no token provided
+        return requestUser;
     }
 }
