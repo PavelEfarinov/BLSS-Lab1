@@ -25,11 +25,17 @@ public class Orders {
     private String address;
 
     @Column(nullable = false)
+    @NotNull
+    @NotEmpty
     private Timestamp formedDate;
 
+    @NotNull
+    @NotEmpty
     private String paymentStatus;
 
     @Column(nullable = false)
+    @NotNull
+    @NotEmpty
     private String orderStatus;
 
     @PrePersist

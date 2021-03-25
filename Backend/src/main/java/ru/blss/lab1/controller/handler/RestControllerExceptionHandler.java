@@ -6,20 +6,38 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import ru.blss.lab1.exception.NoSuchResourceException;
-import ru.blss.lab1.exception.ValidationException;
+import ru.blss.lab1.exception.*;
 
 @ControllerAdvice
 public class RestControllerExceptionHandler {
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NoSuchResourceException.class)
-    public void handleNoSuchResourceException() {
-        // Nothing to do
-    }
-
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Object> handleValidationException(Exception e) {
         return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({NoSuchResourceException.class, CartItemNotFoundException.class, OrderNotFoundException.class})
+    public ResponseEntity<Object> handleNoSuchResourceOrCartItemNotFoundException(Exception e) {
+        return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UnauthorizedUserException.class)
+    public ResponseEntity<Object> handleUnauthorizedUserException(Exception e) {
+        return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(NoMoreItemException.class)
+    public ResponseEntity<Object> handleNoMoreItemException(Exception e) {
+        return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.GONE);
+    }
+
+    @ExceptionHandler(CourierAlreadyExistException.class)
+    public ResponseEntity<Object> handleCourierAlreadyExistException(Exception e) {
+        return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(NoPermissionException.class)
+    public ResponseEntity<Object> handleNoPermissionException(Exception e) {
+        return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.FORBIDDEN);
     }
 
     @ResponseStatus(HttpStatus.BAD_GATEWAY)
