@@ -26,13 +26,15 @@ public class DeliveryService {
 
     public void addNewOrder(User user, Orders order) throws CartItemNotFoundException {
         List<StoreItemInCart> storeItemInCarts = cartItemRepository.getCartItemByOwnerId(user.getId());
-
+        System.out.println(storeItemInCarts.size());
         if (storeItemInCarts == null || !storeItemInCarts.isEmpty()) {
             order.setClient(user);
             orderRepository.save(order);
             for (StoreItemInCart item : storeItemInCarts) {
                 orderItemRepository.save(new OrderItems(item.getQuantity(), item.getItem(), order));
             }
+
+            cartItemRepository.deleteAllByOwnerId(user.getId());
         } else throw new CartItemNotFoundException("Your cart is empty.");
     }
 
