@@ -29,4 +29,10 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
     @Modifying
     @Transactional
     void updateOrderStatus(@Param("id") long id, @Param("status") String status);
+
+    @Query(value = "select * from orders where courier_id not noll", nativeQuery = true)
+    List<Orders> getAllFreeOrders();
+
+    @Query(value = "select * from orders where courier_id = ?1", nativeQuery = true)
+    List<Orders> getAssignedOrders(long id);
 }

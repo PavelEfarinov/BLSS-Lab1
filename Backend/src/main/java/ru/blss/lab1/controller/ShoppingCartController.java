@@ -1,16 +1,15 @@
 package ru.blss.lab1.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.blss.lab1.domain.StoreItem;
+import ru.blss.lab1.domain.StoreItemInCart;
 import ru.blss.lab1.domain.User;
 import ru.blss.lab1.exception.NoMoreItemException;
 import ru.blss.lab1.exception.UnauthorizedUserException;
 import ru.blss.lab1.service.ShoppingCartService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/1")
@@ -40,5 +39,12 @@ public class ShoppingCartController extends ApiController {
         shoppingCartService.RemoveItemFromCart(user, item);
     }
 
-    //todo get current cart
+    @GetMapping("cart/items")
+    public List<StoreItemInCart> getAssignedOrders(HttpServletRequest request) throws UnauthorizedUserException {
+        if (getUser(request) == null) {
+            throw new UnauthorizedUserException();
+        }
+        return shoppingCartService.getItemsInCart(getUser(request));
+    }
+
 }

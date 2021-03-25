@@ -5,6 +5,7 @@ import ru.blss.lab1.domain.*;
 import ru.blss.lab1.exception.*;
 import ru.blss.lab1.repository.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class DeliveryService {
 
     public void addNewOrder(User user, Orders order) throws CartItemNotFoundException {
         List<StoreItemInCart> storeItemInCarts = cartItemRepository.getCartItemByOwnerId(user.getId());
-        System.out.println(storeItemInCarts.size());
+
         if (storeItemInCarts == null || !storeItemInCarts.isEmpty()) {
             order.setClient(user);
             orderRepository.save(order);
@@ -57,14 +58,13 @@ public class DeliveryService {
         if (courier == null) throw new NoPermissionException("You no have courier permission to make a car flight");
 
         List<Orders> orders = orderRepository.getAllByCourierId(courierId);
-        if (orders != null)
-        {
+        if (orders != null) {
             deliveryCar.setCourier(courier);
 
             deliveryCar.setArrivalTime(begin);
             deliveryCar.setDepartureTime(end);
 
-            for (Orders order: orders) {
+            for (Orders order : orders) {
                 orderRepository.updateAddress(order.getId(), address);
             }
             deliveryCarRepository.save(deliveryCar);
@@ -72,8 +72,7 @@ public class DeliveryService {
     }
 
     public void giveCourierRole(User user) throws UnauthorizedUserException {
-        if(user == null)
-        {
+        if (user == null) {
             throw new UnauthorizedUserException();
         }
         Courier courier = new Courier();
@@ -81,4 +80,21 @@ public class DeliveryService {
         courierRepository.save(courier);
     }
 
+    public List<Orders> getAssignedOrders(long id) throws NoPermissionException {
+        try {
+            courierRepository.getOne(id);
+        } catch (EntityNotFoundException e) {
+            throw new NoPermissionException("You have no courier permissions");
+        }
+        return orderRepository.getAssignedOrders(id);
+    }
+
+    public List<Orders> getFreeOrders(long id) throws NoPermissionException {
+        try {
+            courierRepository.getOne(id);
+        } catch (EntityNotFoundException e) {
+            throw new NoPermissionException("You have no courier permissions");
+        }
+        return orderRepository.getAllFreeOrders();
+    }
 }

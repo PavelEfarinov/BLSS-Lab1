@@ -10,6 +10,7 @@ import ru.blss.lab1.repository.CartItemRepository;
 import ru.blss.lab1.repository.StoreItemRepository;
 import ru.blss.lab1.repository.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -66,5 +67,10 @@ public class ShoppingCartService {
         }
 
         storeItemRepository.addStoreItem(item.getId());
+    }
+
+    public List<StoreItemInCart> getItemsInCart(User user)
+    {
+        return cartItemRepository.getCartItemByOwnerId(user.getId());
     }
 }
