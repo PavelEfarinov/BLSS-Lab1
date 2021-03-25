@@ -2,6 +2,7 @@ package ru.blss.lab1.service;
 
 import org.springframework.stereotype.Service;
 import ru.blss.lab1.domain.*;
+import ru.blss.lab1.exception.UnauthorizedUserException;
 import ru.blss.lab1.repository.*;
 
 import java.sql.Timestamp;
@@ -66,7 +67,11 @@ public class DeliveryService {
         }
     }
 
-    public void giveCourierRole(User user){
+    public void giveCourierRole(User user) throws UnauthorizedUserException {
+        if(user == null)
+        {
+            throw new UnauthorizedUserException();
+        }
         Courier courier = new Courier();
         courier.setUser(user);
         courierRepository.save(courier);

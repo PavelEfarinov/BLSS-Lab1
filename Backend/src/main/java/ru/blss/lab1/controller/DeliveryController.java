@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.blss.lab1.domain.*;
+import ru.blss.lab1.exception.UnauthorizedUserException;
 import ru.blss.lab1.service.DeliveryService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +22,7 @@ public class DeliveryController extends ApiController{
     }
 
     @PostMapping("courier")
-    public void upgradeToCourierRole(HttpServletRequest request) {
+    public void upgradeToCourierRole(HttpServletRequest request) throws UnauthorizedUserException {
         deliveryService.giveCourierRole(getUser(request));
     }
 

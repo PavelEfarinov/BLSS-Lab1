@@ -6,7 +6,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import ru.blss.lab1.controller.ApiController;
 import ru.blss.lab1.domain.User;
-import ru.blss.lab1.exception.ValidationException;
+import ru.blss.lab1.exception.UnauthorizedUserException;
 import ru.blss.lab1.service.JwtService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,12 +37,10 @@ public class JwtInterceptor implements HandlerInterceptor {
                 if (authorization != null && authorization.startsWith(BEARER)) {
                     String token = authorization.substring(BEARER.length()).trim();
                     Optional<User> user = jwtService.find(token);
-                    if(user.isPresent()){
+                    if (user.isPresent()) {
                         request.setAttribute("user", user.get());
-                    }
-                    else
-                    {
-                        throw new ValidationException("Invalid user token");
+                    } else {
+                        throw new UnauthorizedUserException();
                     }
                 }
             }

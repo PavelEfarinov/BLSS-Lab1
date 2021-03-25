@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import ru.blss.lab1.domain.StoreItem;
 import ru.blss.lab1.domain.StoreItemInCart;
 import ru.blss.lab1.domain.User;
+import ru.blss.lab1.exception.NoMoreItemException;
+import ru.blss.lab1.exception.NoSuchResourceException;
 import ru.blss.lab1.repository.CartItemRepository;
 import ru.blss.lab1.repository.StoreItemRepository;
 import ru.blss.lab1.repository.UserRepository;
@@ -22,42 +24,44 @@ public class ShoppingCartService {
         this.cartItemRepository = cartItemRepository;
     }
 
-    public void AddItemToCart(User user, StoreItem item) {
-        if (storeItemRepository.getCurrentlyAvailableById(item.getId()) > 0) {
+    public void AddItemToCart(User user, StoreItem item) throws NoMoreItemException {
+        Optional<Integer> available = storeItemRepository.getCurrentlyAvailableById(item.getId());
+        if (!available.isPresent()) {
+            throw new NoSuchResourceException("Was not able to find item with the given id " + "\"" + item.getId() + "\"");
+        }
+        if (available.get() > 0) {
             item = storeItemRepository.findById(item.getId()).get();
             storeItemRepository.takeStoreItem(item.getId());
 
             Optional<StoreItemInCart> storeItemInCartResponse = cartItemRepository.getCartItemByCart(item.getId(), user.getId());
             StoreItemInCart storeItemInCart;
-            if(!storeItemInCartResponse.isPresent())
-            {
+            if (!storeItemInCartResponse.isPresent()) {
                 storeItemInCart = new StoreItemInCart();
 
                 storeItemInCart.setItem(item);
                 storeItemInCart.setOwner(user);
-            }
-            else
-            {
+            } else {
                 storeItemInCart = storeItemInCartResponse.get();
             }
-
             storeItemInCart.setQuantity(storeItemInCart.getQuantity() + 1);
-
             cartItemRepository.saveAndFlush(storeItemInCart);
         } else {
-            // TODO throw proper exception
+            throw new NoMoreItemException("No more items left in the store");
         }
     }
 
     public void RemoveItemFromCart(User user, StoreItem item) {
-        StoreItemInCart storeItemInCart = cartItemRepository.getCartItemByCart(item.getId(), user.getId()).get();
 
-        if(storeItemInCart.getQuantity() > 1)
+        Optional<StoreItemInCart> storeItemInCartResp = cartItemRepository.getCartItemByCart(item.getId(), user.getId());
+        if(!storeItemInCartResp.isPresent())
         {
+            throw new NoSuchResourceException("No such item in the cart");
+        }
+        StoreItemInCart storeItemInCart = storeItemInCartResp.get();
+        if (storeItemInCart.getQuantity() > 1) {
             storeItemInCart.setQuantity(storeItemInCart.getQuantity() - 1);
             cartItemRepository.save(storeItemInCart);
-        }
-        else {
+        } else {
             cartItemRepository.delete(storeItemInCart);
         }
 
