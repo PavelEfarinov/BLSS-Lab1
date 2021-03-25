@@ -1,6 +1,8 @@
 package ru.blss.lab1.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "order_items")
@@ -9,11 +11,21 @@ public class OrderItems {
     @GeneratedValue
     private long id;
 
+    @NotNull
+    @Min(1)
+    private long quantity;
+
     @ManyToOne
     private StoreItem storeItem;
 
     @ManyToOne
     private Orders orders;
+
+    public OrderItems(@NotNull @Min(1) long quantity, StoreItem storeItem, Orders orders) {
+        this.quantity = quantity;
+        this.storeItem = storeItem;
+        this.orders = orders;
+    }
 
     public Orders getOrders() {
         return orders;
@@ -37,5 +49,13 @@ public class OrderItems {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(long quantity) {
+        this.quantity = quantity;
     }
 }

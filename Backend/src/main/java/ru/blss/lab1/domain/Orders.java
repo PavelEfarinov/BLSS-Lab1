@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -16,17 +17,29 @@ public class Orders {
     @ManyToOne
     private Courier courier;
 
+    @ManyToOne
+    private User client;
+
     @NotNull
     @NotEmpty
     private String address;
 
-    @Column(columnDefinition = "timestamp default current_timestamp")
+    @Column(nullable = false)
     private Timestamp formedDate;
 
     private String paymentStatus;
 
-    @Column(columnDefinition = "varchar(255) default 'formed'")
+    @Column(nullable = false)
     private String orderStatus;
+
+    @PrePersist
+    void preInsert() {
+        if (this.formedDate == null)
+            this.formedDate = new Timestamp(new Date().getTime());
+
+        if (this.orderStatus == null)
+            this.orderStatus = "formed";
+    }
 
     public long getId() {
         return id;
@@ -76,4 +89,11 @@ public class Orders {
         this.courier = courier;
     }
 
+    public User getClient() {
+        return client;
+    }
+
+    public void setClient(User client) {
+        this.client = client;
+    }
 }
