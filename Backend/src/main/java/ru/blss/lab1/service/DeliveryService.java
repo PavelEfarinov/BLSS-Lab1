@@ -24,13 +24,10 @@ public class DeliveryService {
         this.cartItemRepository = cartItemRepository;
     }
 
-    public void addNewOrder(User user, String address, String paymentStatus){
-        Orders order = new Orders();
+    public void addNewOrder(User user, Orders order){
         List<StoreItemInCart> storeItemInCarts = cartItemRepository.getCartItemByOwnerId(user.getId());
 
         if (!storeItemInCarts.isEmpty()) {
-            order.setAddress(address);
-            order.setPaymentStatus(paymentStatus);
             order.setClient(user);
             orderRepository.save(order);
             for (StoreItemInCart item : storeItemInCarts) {

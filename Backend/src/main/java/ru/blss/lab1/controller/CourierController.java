@@ -35,7 +35,7 @@ public class CourierController extends ApiController {
         deliveryService.addDeliveryCarFlight(flightInfo.getBegin(), flightInfo.getEnd(), getUser(request).getId(), flightInfo.getAddress());
     }
 
-    class FlightInfoDTO {
+    static class FlightInfoDTO {
         private String address;
         private Timestamp begin;
         private Timestamp end;

@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.blss.lab1.domain.Orders;
+import ru.blss.lab1.exception.UnauthorizedUserException;
+import ru.blss.lab1.exception.ValidationException;
 import ru.blss.lab1.service.DeliveryService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,11 +22,27 @@ public class DeliveryController extends ApiController {
 
     @PostMapping("orders/new")
     public void addNewOrder(@RequestBody Orders orderInfo, HttpServletRequest request) {
-        deliveryService.addNewOrder(getUser(request), orderInfo.getAddress(), orderInfo.getPaymentStatus());
+        if(orderInfo.getAddress() == null || orderInfo.getAddress().isEmpty())
+        {
+            throw new ValidationException("Order address should be provided");
+        }
+        if(orderInfo.getPaymentStatus() == null || orderInfo.getPaymentStatus().isEmpty())
+        {
+            throw new ValidationException("Order payment status should be provided");
+        }
+        deliveryService.addNewOrder(getUser(request), orderInfo);
     }
 
     @PostMapping("orders/update/status")
-    public void updateOrderStatus(@RequestBody Orders orderUpdate) {
+    public void updateOrderStatus(@RequestBody Orders orderUpdate, HttpServletRequest request) throws UnauthorizedUserException {
+        if(getUser(request) == null)
+        {
+            throw new UnauthorizedUserException();
+        }
+        if(orderUpdate.getOrderStatus() == null)
+        {
+            throw new ValidationException("New order status should be provided");
+        }
         deliveryService.updateOrderStatus(orderUpdate.getId(), orderUpdate.getOrderStatus());
     }
 
