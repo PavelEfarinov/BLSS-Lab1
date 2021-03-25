@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.blss.lab1.domain.Orders;
+import ru.blss.lab1.domain.User;
 import ru.blss.lab1.exception.UnauthorizedUserException;
+import ru.blss.lab1.exception.ValidationException;
 import ru.blss.lab1.service.DeliveryService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,13 +28,32 @@ public class CourierController extends ApiController {
     }
 
     @PostMapping("courier/orders/choose")
-    public void chooseOrder(@RequestBody Orders orderInfo, HttpServletRequest request) {
-        deliveryService.setOrderCourier(getUser(request).getId(), orderInfo.getId());
+    public void chooseOrder(@RequestBody Orders orderInfo, HttpServletRequest request) throws UnauthorizedUserException {
+        User user = getUser(request);
+        if (user == null) {
+            throw new UnauthorizedUserException();
+        }
+        deliveryService.setOrderCourier(user.getId(), orderInfo.getId());
     }
 
     @PostMapping("courier/flight/new")
-    public void addNewCarFlight(@RequestBody FlightInfoDTO flightInfo, HttpServletRequest request) {
-        deliveryService.addDeliveryCarFlight(flightInfo.getBegin(), flightInfo.getEnd(), getUser(request).getId(), flightInfo.getAddress());
+    public void addNewCarFlight(@RequestBody FlightInfoDTO flightInfo, HttpServletRequest request) throws UnauthorizedUserException {
+
+        if (flightInfo.getAddress() == null || flightInfo.getAddress().isEmpty()) {
+            throw new ValidationException("Delivery address should be provided");
+        }
+        if (flightInfo.getBegin() == null) {
+            throw new ValidationException("Delivery departure status should be provided");
+        }
+        if (flightInfo.getEnd() == null) {
+            throw new ValidationException("Delivery arrival status should be provided");
+        }
+        User user = getUser(request);
+        if (user == null) {
+            throw new UnauthorizedUserException();
+        }
+
+        deliveryService.addDeliveryCarFlight(flightInfo.getBegin(), flightInfo.getEnd(), user.getId(), flightInfo.getAddress());
     }
 
     static class FlightInfoDTO {
