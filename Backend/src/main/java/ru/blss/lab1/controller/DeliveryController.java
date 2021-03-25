@@ -26,27 +26,29 @@ public class DeliveryController extends ApiController{
     }
 
     @PostMapping("courier/orders/choose")
-    public void chooseOrder(long courierId, long orderId) {
-        deliveryService.setOrderCourier(courierId, orderId);
+    public void chooseOrder(@RequestBody OrderInfoDTO orderInfo) {
+        deliveryService.setOrderCourier(orderInfo.getCourierId(), orderInfo.getOrderId());
     }
 
     @PostMapping("orders/new")
-    public void addNewOrder(@RequestBody OrderInfoDTO orderInfo) {
-        deliveryService.addNewOrder(orderInfo.getAddress(), orderInfo.getPaymentStatus());
+    public void addNewOrder(@RequestBody OrderInfoDTO orderInfo, HttpServletRequest request) {
+        deliveryService.addNewOrder(getUser(request), orderInfo.getAddress(), orderInfo.getPaymentStatus());
     }
 
     @PostMapping("orders/update/status")
-    public void updateOrderStatus(long id, String status) {
-        deliveryService.updateOrderStatus(id, status);
+    public void updateOrderStatus(@RequestBody OrderInfoDTO orderUpdate) {
+        deliveryService.updateOrderStatus(orderUpdate.getOrderId(), orderUpdate.getOrderStatus());
     }
 
     @PostMapping("courier/flight/new")
     public void addNewCarFlight(@RequestBody FlightInfoDTO flightInfo) {
-        deliveryService.addDeliveryCarFlight(flightInfo.getBegin(), flightInfo.getEnd(), flightInfo.getCourierId());
+        deliveryService.addDeliveryCarFlight(flightInfo.getBegin(), flightInfo.getEnd(), flightInfo.getCourierId(), flightInfo.getAddress());
     }
 }
 
 class OrderInfoDTO{
+    private long orderId;
+    private long courierId;
     private String address;
     private String orderStatus;
     private String paymentStatus;
@@ -74,10 +76,27 @@ class OrderInfoDTO{
     public void setPaymentStatus(String paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
+
+    public long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(long orderId) {
+        this.orderId = orderId;
+    }
+
+    public long getCourierId() {
+        return courierId;
+    }
+
+    public void setCourierId(long courierId) {
+        this.courierId = courierId;
+    }
 }
 
 class FlightInfoDTO {
     private long courierId;
+    private String address;
     private Timestamp begin;
     private Timestamp end;
 
@@ -103,5 +122,13 @@ class FlightInfoDTO {
 
     public void setEnd(Timestamp end) {
         this.end = end;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
