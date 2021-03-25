@@ -21,7 +21,7 @@ public class DeliveryController extends ApiController {
     }
 
     @PostMapping("orders/new")
-    public void addNewOrder(@RequestBody Orders orderInfo, HttpServletRequest request) {
+    public void addNewOrder(@RequestBody Orders orderInfo, HttpServletRequest request) throws UnauthorizedUserException {
         if(orderInfo.getAddress() == null || orderInfo.getAddress().isEmpty())
         {
             throw new ValidationException("Order address should be provided");
@@ -29,6 +29,10 @@ public class DeliveryController extends ApiController {
         if(orderInfo.getPaymentStatus() == null || orderInfo.getPaymentStatus().isEmpty())
         {
             throw new ValidationException("Order payment status should be provided");
+        }
+        if(getUser(request) == null)
+        {
+            throw new UnauthorizedUserException();
         }
         deliveryService.addNewOrder(getUser(request), orderInfo);
     }
