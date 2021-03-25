@@ -2,7 +2,7 @@ package ru.blss.lab1.service;
 
 import org.springframework.stereotype.Service;
 import ru.blss.lab1.domain.*;
-import ru.blss.lab1.exception.UnauthorizedUserException;
+import ru.blss.lab1.exception.*;
 import ru.blss.lab1.repository.*;
 
 import java.sql.Timestamp;
@@ -24,33 +24,38 @@ public class DeliveryService {
         this.cartItemRepository = cartItemRepository;
     }
 
-    public void addNewOrder(User user, Orders order){
+    public void addNewOrder(User user, Orders order) throws CartItemNotFoundException {
         List<StoreItemInCart> storeItemInCarts = cartItemRepository.getCartItemByOwnerId(user.getId());
 
-        if (!storeItemInCarts.isEmpty()) {
+        if (storeItemInCarts == null || !storeItemInCarts.isEmpty()) {
             order.setClient(user);
             orderRepository.save(order);
             for (StoreItemInCart item : storeItemInCarts) {
                 orderItemRepository.save(new OrderItems(item.getQuantity(), item.getItem(), order));
             }
-        }
+        } else throw new CartItemNotFoundException("Your cart is empty.");
     }
 
-    public void setOrderCourier(long courierId, long orderId){
+    public void setOrderCourier(long courierId, long orderId) throws CourierAlreadyExistException {
         Orders order = orderRepository.getOne(orderId);
         if (order.getCourier() == null)
             orderRepository.setCourier(orderId, courierId);
+        else throw new CourierAlreadyExistException("This order already has a courier");
     }
 
-    public void updateOrderStatus(long orderId, String status){
+    public void updateOrderStatus(long orderId, String status) throws OrderNotFoundException {
+        if (orderRepository.getOne(orderId) == null) throw new OrderNotFoundException("Order not found");
         orderRepository.updateOrderStatus(orderId, status);
     }
 
-    public void addDeliveryCarFlight(Timestamp begin, Timestamp end, long courierId, String address){
+    public void addDeliveryCarFlight(Timestamp begin, Timestamp end, long courierId, String address) throws NoPermissionException, OrderNotFoundException {
         DeliveryCarFlight deliveryCar = new DeliveryCarFlight();
         Courier courier = courierRepository.getOne(courierId);
+
+        if (courier == null) throw new NoPermissionException("You no have courier permission to make a car flight");
+
         List<Orders> orders = orderRepository.getAllByCourierId(courierId);
-        if (courier != null && orders != null)
+        if (orders != null)
         {
             deliveryCar.setCourier(courier);
 
@@ -61,7 +66,7 @@ public class DeliveryService {
                 orderRepository.updateAddress(order.getId(), address);
             }
             deliveryCarRepository.save(deliveryCar);
-        }
+        } else throw new OrderNotFoundException("Your chosen no orders");
     }
 
     public void giveCourierRole(User user) throws UnauthorizedUserException {
