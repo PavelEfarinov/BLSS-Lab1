@@ -11,9 +11,10 @@ try:
     print('generating more data.')
     dfi = DatabaseFunctionsInvoker(connection)
 
-    for i in range(200):
-        dfi.create_base_user()
+    for i in range(50):
+        user = dfi.create_base_user()
         dfi.create_store_item()
+        dfi.create_order(user)
 
 finally:
     cur.close()

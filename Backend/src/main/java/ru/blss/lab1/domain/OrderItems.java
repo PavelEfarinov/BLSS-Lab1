@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "order_items")
 public class OrderItems {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotNull

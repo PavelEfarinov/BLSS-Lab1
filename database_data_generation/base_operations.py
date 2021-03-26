@@ -1,4 +1,4 @@
-tables = ['base_user', 'store_item', 'courier', 'delivery_car_flight']
+tables = ['order_items', 'orders', 'base_user', 'store_item', 'courier', 'delivery_car_flight']
 
 def reset_database(connection):
     cur = connection.cursor()

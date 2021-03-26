@@ -31,7 +31,16 @@ def get_login(name: string, surname: string):
 def generate_store_item():
     name = random.choice(top_companies_2000) + ' ' + Faker().word()
     description = Faker().paragraph(nb_sentences=2)
-    stored = random.randint(0, 10)
+    stored = random.randint(100, 110)
     return {'name': name,
             'description': description,
             'stored': stored}
+
+
+def generate_order():
+    address = Faker().address()
+    date = Faker().iso8601()
+    return {'address': address,
+            'formed_date': date,
+            'order_status': 'formed',
+            'payment_status': 'online'}
