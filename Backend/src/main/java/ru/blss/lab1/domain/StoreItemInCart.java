@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 public class StoreItemInCart {
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
     @ManyToOne
     private User owner;
@@ -17,23 +17,21 @@ public class StoreItemInCart {
     @ManyToOne
     private StoreItem item;
 
-    @NotNull
-    @Min(1)
-    private long quantity;
+    private @NotNull @Min(1) Long quantity;
 
-    public long getQuantity() {
+    public @NotNull @Min(1) Long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(long quantity) {
+    public void setQuantity(@NotNull @Min(1) Long quantity) {
         this.quantity = quantity;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

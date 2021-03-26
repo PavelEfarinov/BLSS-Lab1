@@ -9,16 +9,16 @@ import ru.blss.lab1.domain.StoreItem;
 import java.util.Optional;
 
 public interface StoreItemRepository extends JpaRepository<StoreItem, Long> {
-    @Query(value = "SELECT currently_available from store_item where id = ?1", nativeQuery = true)
+    @Query(value = "select s.currentlyAvailable from StoreItem s where s.id = ?1")
     @Transactional
     Optional<Integer> getCurrentlyAvailableById(long id);
 
-    @Query(value = "UPDATE store_item set currently_available = currently_available - 1 where id = ?1 ", nativeQuery = true)
+    @Query(value = "update StoreItem s set s.currentlyAvailable = s.currentlyAvailable - 1 where s.id = ?1 ")
     @Modifying
     @Transactional
     void takeStoreItem(long id);
 
-    @Query(value = "UPDATE store_item set currently_available = currently_available + 1 where id = ?1", nativeQuery = true)
+    @Query(value = "update StoreItem s set s.currentlyAvailable = s.currentlyAvailable + 1 where s.id = ?1")
     @Modifying
     @Transactional
     void addStoreItem(long id);

@@ -11,49 +11,49 @@ import javax.validation.constraints.NotEmpty;
 public class StoreItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
+    private Long id;
 
     @NotNull
     @NotEmpty
-    private String Name;
+    private String name;
 
     @NotNull
     @NotEmpty
-    private String Description;
+    private String description;
 
     @NotNull
     @Min(0)
-    private int CurrentlyAvailable;
+    private int currentlyAvailable;
 
     public long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String description) {
-        Description = description;
+        this.description = description;
     }
 
     public int getCurrentlyAvailable() {
-        return CurrentlyAvailable;
+        return currentlyAvailable;
     }
 
     public void setCurrentlyAvailable(int currentlyAvailable) {
-        CurrentlyAvailable = currentlyAvailable;
+        this.currentlyAvailable = currentlyAvailable;
     }
 }

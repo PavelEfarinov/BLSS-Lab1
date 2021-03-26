@@ -25,8 +25,7 @@ public class ShoppingCartService {
         this.cartItemRepository = cartItemRepository;
     }
 
-    //Java naming convention O_O
-    public void AddItemToCart(User user, StoreItem item) throws NoMoreItemException {
+    public void addItemToCart(User user, StoreItem item) throws NoMoreItemException {
         Optional<Integer> available = storeItemRepository.getCurrentlyAvailableById(item.getId());
         if (!available.isPresent()) {
             throw new NoSuchResourceException("Was not able to find item with the given id " + "\"" + item.getId() + "\"");
@@ -52,7 +51,7 @@ public class ShoppingCartService {
         }
     }
 
-    public void RemoveItemFromCart(User user, StoreItem item) {
+    public void removeItemFromCart(User user, StoreItem item) {
 
         Optional<StoreItemInCart> storeItemInCartResp = cartItemRepository.getCartItemByCart(item.getId(), user.getId());
         if(!storeItemInCartResp.isPresent())

@@ -2,11 +2,12 @@ package ru.blss.lab1.service;
 
 import org.springframework.stereotype.Service;
 import ru.blss.lab1.domain.*;
+import ru.blss.lab1.domain.order.Order;
 import ru.blss.lab1.exception.*;
 import ru.blss.lab1.repository.*;
 
 import javax.persistence.EntityNotFoundException;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -25,14 +26,14 @@ public class DeliveryService {
         this.cartItemRepository = cartItemRepository;
     }
 
-    public void addNewOrder(User user, Orders order) throws CartItemNotFoundException {
+    public void addNewOrder(User user, Order order) throws CartItemNotFoundException {
         List<StoreItemInCart> storeItemInCarts = cartItemRepository.getCartItemByOwnerId(user.getId());
 
         if (storeItemInCarts == null || !storeItemInCarts.isEmpty()) {
             order.setClient(user);
             orderRepository.save(order);
             for (StoreItemInCart item : storeItemInCarts) {
-                orderItemRepository.save(new OrderItems(item.getQuantity(), item.getItem(), order));
+                orderItemRepository.save(new OrderItem(item.getQuantity(), item.getItem(), order));
             }
 
             cartItemRepository.deleteAllByOwnerId(user.getId());
@@ -40,7 +41,7 @@ public class DeliveryService {
     }
 
     public void setOrderCourier(long courierId, long orderId) throws CourierAlreadyExistException {
-        Orders order = orderRepository.getOne(orderId);
+        Order order = orderRepository.getOne(orderId);
         if (order.getCourier() == null)
             orderRepository.setCourier(orderId, courierId);
         else throw new CourierAlreadyExistException("This order already has a courier");
@@ -51,24 +52,24 @@ public class DeliveryService {
         orderRepository.updateOrderStatus(orderId, status);
     }
 
-    public void addDeliveryCarFlight(Timestamp begin, Timestamp end, long courierId, String address) throws NoPermissionException, OrderNotFoundException {
+    public void addDeliveryCarFlight(LocalDateTime begin, LocalDateTime end, long courierId, String address) throws NoPermissionException, OrderNotFoundException {
         DeliveryCarFlight deliveryCar = new DeliveryCarFlight();
         Courier courier = courierRepository.getOne(courierId);
 
         if (courier == null) throw new NoPermissionException("You no have courier permission to make a car flight");
 
-        List<Orders> orders = orderRepository.getAllByCourierId(courierId);
-        if (orders != null) {
+        List<Order> order = orderRepository.getAllByCourierId(courierId);
+        if (order != null) {
             deliveryCar.setCourier(courier);
 
             deliveryCar.setArrivalTime(begin);
             deliveryCar.setDepartureTime(end);
 
-            for (Orders order : orders) {
-                orderRepository.updateAddress(order.getId(), address);
+            for (Order ord: order) {
+                orderRepository.updateAddress(ord.getId(), address);
             }
             deliveryCarRepository.save(deliveryCar);
-        } else throw new OrderNotFoundException("Your chosen no orders");
+        } else throw new OrderNotFoundException("Your chosen no order");
     }
 
     public void giveCourierRole(User user) throws UnauthorizedUserException, CourierAlreadyExistException {
@@ -82,7 +83,7 @@ public class DeliveryService {
         courierRepository.save(courier);
     }
 
-    public List<Orders> getAssignedOrders(long id) throws NoPermissionException {
+    public List<Order> getAssignedOrders(long id) throws NoPermissionException {
         try {
             courierRepository.getOne(id);
         } catch (EntityNotFoundException e) {
@@ -91,7 +92,7 @@ public class DeliveryService {
         return orderRepository.getAssignedOrders(id);
     }
 
-    public List<Orders> getFreeOrders(long id) throws NoPermissionException {
+    public List<Order> getFreeOrders(long id) throws NoPermissionException {
         try {
             courierRepository.getOne(id);
         } catch (EntityNotFoundException e) {

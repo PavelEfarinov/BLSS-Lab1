@@ -10,19 +10,19 @@ public class UserCredentials {
     @NotEmpty
     @Size(min = 2, max = 24)
     @Pattern(regexp = "[a-z0-9]+", message = "Expected lowercase Latin letters or numbers")
-    private String login;
+    private String username;
 
     @NotNull
     @NotEmpty
     @Size(min = 1, max = 100)
     private String password;
 
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

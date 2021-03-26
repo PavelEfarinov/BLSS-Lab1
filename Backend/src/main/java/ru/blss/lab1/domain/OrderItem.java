@@ -1,38 +1,42 @@
 package ru.blss.lab1.domain;
 
+import ru.blss.lab1.domain.order.Order;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "order_items")
-public class OrderItems { //Todo: plural
+public class OrderItem { //Todo: plural
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @NotNull
-    @Min(1)
-    private long quantity;
+    private @NotNull @Min(1) Long quantity;
 
     @ManyToOne
     private StoreItem storeItem;
 
     @ManyToOne
-    private Orders orders;
+    private Order order;
 
-    public OrderItems(@NotNull @Min(1) long quantity, StoreItem storeItem, Orders orders) {
+    public OrderItem(@NotNull @Min(1) long quantity, StoreItem storeItem, Order order) {
         this.quantity = quantity;
         this.storeItem = storeItem;
-        this.orders = orders;
+        this.order = order;
     }
 
-    public Orders getOrders() {
-        return orders;
+    public OrderItem() {
+
     }
 
-    public void setOrders(Orders orders) {
-        this.orders = orders;
+    public Order getOrders() {
+        return order;
+    }
+
+    public void setOrders(Order order) {
+        this.order = order;
     }
 
     public StoreItem getStoreItem() {
@@ -43,19 +47,19 @@ public class OrderItems { //Todo: plural
         this.storeItem = storeItem;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getQuantity() {
+    public @NotNull @Min(1) Long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(long quantity) {
+    public void setQuantity(@NotNull @Min(1) Long quantity) {
         this.quantity = quantity;
     }
 }

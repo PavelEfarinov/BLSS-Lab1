@@ -1,11 +1,9 @@
 package ru.blss.lab1.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "delivery_car_flight")
@@ -13,43 +11,43 @@ public class DeliveryCarFlight {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NotNull
     @NotEmpty
-    private Timestamp arrival_time; //Todo: camal case
+    private LocalDateTime arrivalTime;
 
     @NotNull
     @NotEmpty
-    private Timestamp departure_time;
+    private LocalDateTime departureTime;
 
     @ManyToOne
     private Courier courier;
 
     public DeliveryCarFlight(){}
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Timestamp getArrivalTime() {
-        return arrival_time;
+    public LocalDateTime getArrivalTime() {
+        return arrivalTime;
     }
 
-    public void setArrivalTime(Timestamp arrival_time) {
-        this.arrival_time = arrival_time;
+    public void setArrivalTime(LocalDateTime arrival_time) {
+        this.arrivalTime = arrival_time;
     }
 
-    public Timestamp getDepartureTime() {
-        return departure_time;
+    public LocalDateTime getDepartureTime() {
+        return departureTime;
     }
 
-    public void setDepartureTime(Timestamp departure_time) {
-        this.departure_time = departure_time;
+    public void setDepartureTime(LocalDateTime departure_time) {
+        this.departureTime = departure_time;
     }
 
     public Courier getCourier() {

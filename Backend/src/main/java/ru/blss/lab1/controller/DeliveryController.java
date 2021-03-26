@@ -1,7 +1,7 @@
 package ru.blss.lab1.controller;
 
 import org.springframework.web.bind.annotation.*;
-import ru.blss.lab1.domain.Orders;
+import ru.blss.lab1.domain.order.Order;
 import ru.blss.lab1.exception.*;
 import ru.blss.lab1.service.DeliveryService;
 
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/1")
+@RequestMapping("/api/v1")
 public class DeliveryController extends ApiController { //TODO: Migrate from extends to field
     private DeliveryService deliveryService;
 
@@ -17,29 +17,29 @@ public class DeliveryController extends ApiController { //TODO: Migrate from ext
         this.deliveryService = deliveryService;
     }
 
-    @GetMapping("orders/free")
-    public List<Orders> getFreeOrders(HttpServletRequest request) throws UnauthorizedUserException, NoPermissionException {
+    @GetMapping("order/free")
+    public List<Order> getFreeOrders(HttpServletRequest request) throws UnauthorizedUserException, NoPermissionException {
         if (getUser(request) == null) {
             throw new UnauthorizedUserException();
         }
         return deliveryService.getFreeOrders(getUser(request).getId());
     }
 
-    @GetMapping("orders/assigned")
-    public List<Orders> getAssignedOrders(HttpServletRequest request) throws UnauthorizedUserException, NoPermissionException {
+    @GetMapping("order/assigned")
+    public List<Order> getAssignedOrders(HttpServletRequest request) throws UnauthorizedUserException, NoPermissionException {
         if (getUser(request) == null) {
             throw new UnauthorizedUserException();
         }
         return deliveryService.getAssignedOrders(getUser(request).getId());
     }
 
-    @PostMapping("orders/new")
-    public void addNewOrder(@RequestBody Orders orderInfo, HttpServletRequest request) throws CartItemNotFoundException, UnauthorizedUserException {
+    @PostMapping("order/new")
+    public void addNewOrder(@RequestBody Order orderInfo, HttpServletRequest request) throws CartItemNotFoundException, UnauthorizedUserException {
         if(orderInfo.getAddress() == null || orderInfo.getAddress().isEmpty())
         {
             throw new ValidationException("Order address should be provided");
         }
-        if (orderInfo.getPaymentStatus() == null || orderInfo.getPaymentStatus().isEmpty()) {
+        if (orderInfo.getPaymentStatus() == null) {
             throw new ValidationException("Order payment status should be provided");
         }
         if (getUser(request) == null) {
@@ -48,8 +48,8 @@ public class DeliveryController extends ApiController { //TODO: Migrate from ext
         deliveryService.addNewOrder(getUser(request), orderInfo);
     }
 
-    @PostMapping("orders/update/status")
-    public void updateOrderStatus(@RequestBody Orders orderUpdate, HttpServletRequest request) throws UnauthorizedUserException, OrderNotFoundException {
+    @PostMapping("order/update/status")
+    public void updateOrderStatus(@RequestBody Order orderUpdate, HttpServletRequest request) throws UnauthorizedUserException, OrderNotFoundException {
         if(getUser(request) == null)
         {
             throw new UnauthorizedUserException();
@@ -57,7 +57,7 @@ public class DeliveryController extends ApiController { //TODO: Migrate from ext
         if (orderUpdate.getOrderStatus() == null) {
             throw new ValidationException("New order status should be provided");
         }
-        deliveryService.updateOrderStatus(orderUpdate.getId(), orderUpdate.getOrderStatus());
+        deliveryService.updateOrderStatus(orderUpdate.getId(), orderUpdate.getOrderStatus().name());
     }
 
 }

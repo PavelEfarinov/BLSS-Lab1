@@ -11,18 +11,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CartItemRepository extends JpaRepository<StoreItemInCart, Long> {
-    //TODO: Remove Native SQL
-
-
-
-    @Query(value = "SELECT * from item_in_cart where item_id = ?1 AND owner_id = ?2", nativeQuery = true)
+    @Query(value = "select s from StoreItemInCart s where s.item.id = ?1 AND s.owner.id = ?2")
     Optional<StoreItemInCart> getCartItemByCart(long itemId, long ownerId);
 
-    @Query(value = "SELECT * from item_in_cart where owner_id = :owner_id", nativeQuery = true)
-    List<StoreItemInCart> getCartItemByOwnerId(@Param("owner_id") long ownerId);
+    @Query(value = "select s from StoreItemInCart s where s.owner.id = :ownerId")
+    List<StoreItemInCart> getCartItemByOwnerId(@Param("ownerId") long ownerId);
 
-    @Query(value = "delete from item_in_cart where owner_id = :owner_id", nativeQuery = true)
+    @Query(value = "delete from StoreItemInCart s where s.owner.id = :ownerId")
     @Modifying
     @Transactional
-    int deleteAllByOwnerId(@Param("owner_id") long ownerId);
+    int deleteAllByOwnerId(@Param("ownerId") long ownerId);
 }

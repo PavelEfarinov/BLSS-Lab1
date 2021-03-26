@@ -6,11 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 import ru.blss.lab1.domain.Courier;
 
-import java.sql.Date;
-import java.sql.Timestamp;
-
 public interface CourierRepository extends JpaRepository<Courier, Long> {
-    @Query(value = "UPDATE courier where id = ?0 set rating = ?1", nativeQuery = true)
+    @Query(value = "update Courier c set c.rating = ?1 where c.id = ?2")
     @Modifying
     @Transactional
     int updateRating(long id, double rating);

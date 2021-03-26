@@ -16,18 +16,17 @@ public class UserService {
     }
 
     public User findByLoginAndPassword(String login, String password) {
-        return login == null || password == null ? null : userRepository.findByLoginAndPassword(login, password);
+        return login == null || password == null ? null : userRepository.findAllByUsernameAndPassword(login, password);
     }
 
     public void register(UserRegisterCredentials userRegisterCredentials) {
         User user = new User();
-        user.setLogin(userRegisterCredentials.getLogin());
-        user.setName(userRegisterCredentials.getName());
-        user.setSurname(userRegisterCredentials.getSurname());
+        user.setUsername(userRegisterCredentials.getUsername());
+        user.setFirstName(userRegisterCredentials.getName());
+        user.setLastName(userRegisterCredentials.getLastName());
         user.setEmail(userRegisterCredentials.getEmail());
+        user.setPassword(userRegisterCredentials.getPassword());
         userRepository.save(user);
-        //TODO: Чаво?????
-        userRepository.updatePassword(user.getId(), userRegisterCredentials.getPassword());
     }
 
     public List<User> findAll() {
@@ -36,7 +35,7 @@ public class UserService {
 
 
     public boolean isLoginVacant(String login) {
-        return userRepository.countByLogin(login) == 0;
+        return userRepository.countByUsername(login) == 0;
     }
 
 }

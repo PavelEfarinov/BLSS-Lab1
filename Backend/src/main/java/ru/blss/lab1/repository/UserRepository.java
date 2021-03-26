@@ -9,15 +9,14 @@ import ru.blss.lab1.domain.User;
 import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Query(value = "SELECT * FROM base_user WHERE login=?1 AND password=?2", nativeQuery = true)
-    User findByLoginAndPassword(String login, String password);
+    User findAllByUsernameAndPassword(String username, String password);
 
     @Transactional
     @Modifying
-    @Query(value = "UPDATE base_user SET password=?2 WHERE id=?1", nativeQuery = true)
+    @Query(value = "update User u set u.password = ?2 where u.id = ?1")
     void updatePassword(long id, String password);
 
-    int countByLogin(String login);
+    int countByUsername(String username);
 
     List<User> findAllByOrderByIdDesc();
 }

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/1")
+@RequestMapping("/api/v1")
 public class ShoppingCartController extends ApiController {
 
     ShoppingCartService shoppingCartService;
@@ -27,7 +27,7 @@ public class ShoppingCartController extends ApiController {
         if (user == null) {
             throw new UnauthorizedUserException();
         }
-        shoppingCartService.AddItemToCart(user, item);
+        shoppingCartService.addItemToCart(user, item);
     }
 
     @PostMapping("cart/remove")
@@ -36,7 +36,7 @@ public class ShoppingCartController extends ApiController {
         if (user == null) {
             throw new UnauthorizedUserException();
         }
-        shoppingCartService.RemoveItemFromCart(user, item);
+        shoppingCartService.removeItemFromCart(user, item);
     }
 
     @GetMapping("cart/items")

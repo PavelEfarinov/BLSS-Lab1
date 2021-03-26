@@ -14,7 +14,7 @@ import ru.blss.lab1.util.BindingResultUtils;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/1")
+@RequestMapping("/api/v1")
 public class JwtController extends ApiController {
     private final JwtService jwtService;
     private final UserCredentialsEnterValidator userCredentialsEnterValidator;
@@ -37,7 +37,7 @@ public class JwtController extends ApiController {
             throw new ValidationException(BindingResultUtils.getErrorMessage(bindingResult));
         }
 
-        return jwtService.create(userCredentials.getLogin(), userCredentials.getPassword());
+        return jwtService.create(userCredentials.getUsername(), userCredentials.getPassword());
     }
 
 

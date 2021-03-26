@@ -5,17 +5,17 @@ import javax.validation.constraints.*;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 @Entity
-@Table(name = "base_user", uniqueConstraints = @UniqueConstraint(columnNames = "login"))
+@Table(name = "base_user", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NotNull
     @NotEmpty
     @Size(min = 2, max = 24)
     @Pattern(regexp = "[a-z0-9_]{2,24}")
-    private String login; //username
+    private String username;
 
     @NotNull
     @NotEmpty
@@ -24,12 +24,12 @@ public class User {
     @NotNull
     @NotEmpty
     @Size(min = 1, max = 100)
-    private String name; //firstname
+    private String firstName;
 
     @NotNull
     @NotEmpty
     @Size(min = 1, max = 100)
-    private String surname; //lastname
+    private String lastName;
 
     @NotNull
     @NotEmpty
@@ -51,36 +51,36 @@ public class User {
         this.courier = courier;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String login) {
+        this.username = login;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String name) {
+        this.firstName = name;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setLastName(String surname) {
+        this.lastName = surname;
     }
 
     public String getEmail() {
@@ -89,5 +89,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

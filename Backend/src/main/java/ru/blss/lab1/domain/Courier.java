@@ -1,21 +1,16 @@
 package ru.blss.lab1.domain;
 
-import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.Max;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import java.sql.Date;
 
 @Entity
 @Table(name = "courier")
 public class Courier {
 
     @Id
-    private long id;
+    private Long id;
 
-    @Max(5)
-    private double rating;
+    private @Max(5) Double rating;
 
     @OneToOne
     @MapsId
@@ -44,7 +39,7 @@ public class Courier {
         return rating;
     }
 
-    public void setRating(double rating) {
+    public void setRating(@Max(5) Double rating) {
         this.rating = rating;
     }
 

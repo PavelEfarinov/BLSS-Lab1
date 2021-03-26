@@ -44,6 +44,6 @@ public class JwtService {
     }
 
     public String create(String login, String password) {
-        return create(userRepository.findByLoginAndPassword(login, password));
+        return create(userRepository.findAllByUsernameAndPassword(login, password));
     }
 }

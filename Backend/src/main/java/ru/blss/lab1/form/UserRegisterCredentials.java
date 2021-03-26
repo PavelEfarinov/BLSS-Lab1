@@ -10,13 +10,13 @@ public class UserRegisterCredentials extends UserCredentials {
     @NotEmpty
     @Size(min = 2, max = 30)
     @Pattern(regexp = "[a-zA-Zа-яА-Я -]+", message = "Expected only letters in name")
-    private String name;
+    private String firstName;
 
     @NotNull
     @NotEmpty
     @Size(min = 2, max = 30)
     @Pattern(regexp = "[a-zA-Zа-яА-Я -]+", message = "Expected only letters in surname")
-    private String surname;
+    private String lastName;
 
     @NotNull
     @NotEmpty
@@ -25,11 +25,11 @@ public class UserRegisterCredentials extends UserCredentials {
     private String email;
 
     public String getName() {
-        return name;
+        return firstName;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getLastName() {
+        return lastName;
     }
 
     public String getEmail() {
