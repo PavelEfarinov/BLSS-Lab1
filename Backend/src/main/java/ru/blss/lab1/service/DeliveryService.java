@@ -77,7 +77,7 @@ public class DeliveryService {
             throw new UnauthorizedUserException();
         }
 
-        if (courierRepository.getOne(user.getId()) != null) throw new CourierAlreadyExistException("You are already courier");
+        if (courierRepository.findById(user.getId()).isPresent()) throw new CourierAlreadyExistException("You are already courier");
         Courier courier = new Courier();
         courier.setUser(user);
         courierRepository.save(courier);
