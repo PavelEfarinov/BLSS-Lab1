@@ -12,7 +12,7 @@ public abstract class ApiController {
     @Autowired
     UserRepository userRepository;
 
-    @ModelAttribute
+    @ModelAttribute("user")
     public User getUser(HttpServletRequest httpServletRequest) {
         User requestUser = (User) httpServletRequest.getAttribute("user");
         if(requestUser != null) {

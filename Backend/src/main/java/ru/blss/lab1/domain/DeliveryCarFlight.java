@@ -1,7 +1,7 @@
 package ru.blss.lab1.domain;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -14,11 +14,11 @@ public class DeliveryCarFlight {
     private Long id;
 
     @NotNull
-    @NotEmpty
+    @NotBlank
     private LocalDateTime arrivalTime;
 
     @NotNull
-    @NotEmpty
+    @NotBlank
     private LocalDateTime departureTime;
 
     @ManyToOne

@@ -8,7 +8,6 @@ import ru.blss.lab1.exception.NoMoreItemException;
 import ru.blss.lab1.exception.UnauthorizedUserException;
 import ru.blss.lab1.service.ShoppingCartService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -22,8 +21,7 @@ public class ShoppingCartController extends ApiController {
     }
 
     @PostMapping("cart/add")
-    public void addItem(HttpServletRequest request, @RequestBody StoreItem item) throws UnauthorizedUserException, NoMoreItemException {
-        User user = getUser(request);
+    public void addItem(@ModelAttribute("user") User user, @RequestBody StoreItem item) throws UnauthorizedUserException, NoMoreItemException {
         if (user == null) {
             throw new UnauthorizedUserException();
         }
@@ -31,8 +29,7 @@ public class ShoppingCartController extends ApiController {
     }
 
     @PostMapping("cart/remove")
-    public void removeItem(HttpServletRequest request, @RequestBody StoreItem item) throws UnauthorizedUserException {
-        User user = getUser(request);
+    public void removeItem(@ModelAttribute("user") User user, @RequestBody StoreItem item) throws UnauthorizedUserException {
         if (user == null) {
             throw new UnauthorizedUserException();
         }
@@ -40,11 +37,11 @@ public class ShoppingCartController extends ApiController {
     }
 
     @GetMapping("cart/items")
-    public List<StoreItemInCart> getAssignedOrders(HttpServletRequest request) throws UnauthorizedUserException {
-        if (getUser(request) == null) {
+    public List<StoreItemInCart> getAssignedOrders(@ModelAttribute("user") User user) throws UnauthorizedUserException {
+        if (user == null) {
             throw new UnauthorizedUserException();
         }
-        return shoppingCartService.getItemsInCart(getUser(request));
+        return shoppingCartService.getItemsInCart(user);
     }
 
 }

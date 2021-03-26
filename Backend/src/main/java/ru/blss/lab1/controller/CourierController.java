@@ -1,9 +1,6 @@
 package ru.blss.lab1.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.blss.lab1.domain.order.Order;
 import ru.blss.lab1.domain.User;
 import ru.blss.lab1.exception.*;
@@ -22,13 +19,12 @@ public class CourierController extends ApiController {
     }
 
     @PostMapping("courier")
-    public void upgradeToCourierRole(HttpServletRequest request) throws UnauthorizedUserException, CourierAlreadyExistException {
-        deliveryService.giveCourierRole(getUser(request));
+    public void upgradeToCourierRole(@ModelAttribute("user") User user) throws UnauthorizedUserException, CourierAlreadyExistException {
+        deliveryService.giveCourierRole(user);
     }
 
     @PostMapping("courier/order/choose")
-    public void chooseOrder(@RequestBody Order orderInfo, HttpServletRequest request) throws UnauthorizedUserException, CourierAlreadyExistException {
-        User user = getUser(request);
+    public void chooseOrder(@RequestBody Order orderInfo, @ModelAttribute("user") User user) throws UnauthorizedUserException, CourierAlreadyExistException {
         if (user == null) {
             throw new UnauthorizedUserException();
         }
@@ -36,7 +32,7 @@ public class CourierController extends ApiController {
     }
 
     @PostMapping("courier/flight/new")
-    public void addNewCarFlight(@RequestBody FlightInfoDTO flightInfo, HttpServletRequest request) throws UnauthorizedUserException, NoPermissionException, OrderNotFoundException {
+    public void addNewCarFlight(@RequestBody FlightInfoDTO flightInfo, @ModelAttribute("user") User user) throws UnauthorizedUserException, NoPermissionException, OrderNotFoundException {
 
         if (flightInfo.getAddress() == null || flightInfo.getAddress().isEmpty()) {
             throw new ValidationException("Delivery address should be provided");
@@ -47,7 +43,6 @@ public class CourierController extends ApiController {
         if (flightInfo.getEnd() == null) {
             throw new ValidationException("Delivery arrival status should be provided");
         }
-        User user = getUser(request);
         if (user == null) {
             throw new UnauthorizedUserException();
         }

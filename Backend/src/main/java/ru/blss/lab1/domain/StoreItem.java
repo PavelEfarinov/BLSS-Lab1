@@ -4,7 +4,7 @@ import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "store_item")
@@ -14,11 +14,11 @@ public class StoreItem {
     private Long id;
 
     @NotNull
-    @NotEmpty
+    @NotBlank
     private String name;
 
     @NotNull
-    @NotEmpty
+    @NotBlank
     private String description;
 
     @NotNull

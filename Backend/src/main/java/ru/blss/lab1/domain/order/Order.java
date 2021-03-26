@@ -4,7 +4,7 @@ import ru.blss.lab1.domain.Courier;
 import ru.blss.lab1.domain.User;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -24,22 +24,22 @@ public class Order {
     private User client;
 
     @NotNull
-    @NotEmpty
+    @NotBlank
     private String address;
 
     @Column(nullable = false)
     @NotNull
-    @NotEmpty
+    @NotBlank
     private LocalDateTime formedDate;
 
     @NotNull
-    @NotEmpty
+    @NotBlank
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
 
     @Column(nullable = false)
     @NotNull
-    @NotEmpty
+    @NotBlank
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 

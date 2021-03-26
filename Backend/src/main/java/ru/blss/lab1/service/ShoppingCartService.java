@@ -38,9 +38,9 @@ public class ShoppingCartService {
             StoreItemInCart storeItemInCart;
             if (!storeItemInCartResponse.isPresent()) {
                 storeItemInCart = new StoreItemInCart();
-
                 storeItemInCart.setItem(item);
                 storeItemInCart.setOwner(user);
+                storeItemInCart.setQuantity(0L);
             } else {
                 storeItemInCart = storeItemInCartResponse.get();
             }

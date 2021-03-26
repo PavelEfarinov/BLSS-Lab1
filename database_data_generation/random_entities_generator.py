@@ -15,7 +15,7 @@ def generate_base_user():
     return {'name': user_name,
             'surname': user_surname,
             'email': user_email,
-            'login': user_login}
+            'username': user_login}
 
 
 def get_email(name: string, surname: string):
@@ -42,5 +42,6 @@ def generate_order():
     date = Faker().iso8601()
     return {'address': address,
             'formed_date': date,
-            'order_status': 'formed',
-            'payment_status': 'online'}
+            'order_status': 'FORMED',
+            'payment_status': 'ONLINE',
+            'delivery_method': 'COURIER'}
