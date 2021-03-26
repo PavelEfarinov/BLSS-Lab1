@@ -6,6 +6,13 @@ class DatabaseFunctionsInvoker:
         self.connection = connection
         self.cursor = connection.cursor()
 
+    def create_test_user(self):
+        user = generate_base_user()
+        self.cursor.execute('insert into base_user(email, login, name, surname, password) values(%s, %s, %s, %s, %s)',
+                            (user['email'], 'test_login', user['name'],
+                             user['surname'], 'pass'))
+        return user
+
     def create_base_user(self):
         user = generate_base_user()
         self.cursor.execute('insert into base_user(email, login, name, surname, password) values(%s, %s, %s, %s, %s)',
