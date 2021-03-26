@@ -26,6 +26,7 @@ public class UserService {
         user.setSurname(userRegisterCredentials.getSurname());
         user.setEmail(userRegisterCredentials.getEmail());
         userRepository.save(user);
+        //TODO: Чаво?????
         userRepository.updatePassword(user.getId(), userRegisterCredentials.getPassword());
     }
 

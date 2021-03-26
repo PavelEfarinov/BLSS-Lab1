@@ -25,6 +25,7 @@ public class ShoppingCartService {
         this.cartItemRepository = cartItemRepository;
     }
 
+    //Java naming convention O_O
     public void AddItemToCart(User user, StoreItem item) throws NoMoreItemException {
         Optional<Integer> available = storeItemRepository.getCurrentlyAvailableById(item.getId());
         if (!available.isPresent()) {

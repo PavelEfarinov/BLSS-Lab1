@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/1")
-public class DeliveryController extends ApiController {
+public class DeliveryController extends ApiController { //TODO: Migrate from extends to field
     private DeliveryService deliveryService;
 
     public DeliveryController(DeliveryService deliveryService) {

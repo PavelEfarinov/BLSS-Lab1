@@ -11,6 +11,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CartItemRepository extends JpaRepository<StoreItemInCart, Long> {
+    //TODO: Remove Native SQL
+
+
+
     @Query(value = "SELECT * from item_in_cart where item_id = ?1 AND owner_id = ?2", nativeQuery = true)
     Optional<StoreItemInCart> getCartItemByCart(long itemId, long ownerId);
 

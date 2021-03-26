@@ -17,7 +17,7 @@ public class DeliveryCarFlight {
 
     @NotNull
     @NotEmpty
-    private Timestamp arrival_time;
+    private Timestamp arrival_time; //Todo: camal case
 
     @NotNull
     @NotEmpty

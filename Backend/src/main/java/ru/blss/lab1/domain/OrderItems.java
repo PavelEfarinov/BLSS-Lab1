@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "order_items")
-public class OrderItems {
+public class OrderItems { //Todo: plural
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

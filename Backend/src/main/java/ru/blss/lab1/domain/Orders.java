@@ -5,11 +5,10 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "orders")
-public class Orders {
+public class Orders { //Change from plural form
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -31,12 +30,15 @@ public class Orders {
 
     @NotNull
     @NotEmpty
-    private String paymentStatus;
+    private String paymentStatus; //Todo: Maybe enum?
 
     @Column(nullable = false)
     @NotNull
     @NotEmpty
-    private String orderStatus;
+    private String orderStatus; //Todo: Maybe enum?
+
+    //TODO: Способ поставки????
+
 
     @PrePersist
     void preInsert() {
