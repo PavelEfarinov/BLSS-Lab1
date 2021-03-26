@@ -22,7 +22,7 @@ public class CourierController extends ApiController {
     }
 
     @PostMapping("courier")
-    public void upgradeToCourierRole(HttpServletRequest request) throws UnauthorizedUserException {
+    public void upgradeToCourierRole(HttpServletRequest request) throws UnauthorizedUserException, CourierAlreadyExistException {
         deliveryService.giveCourierRole(getUser(request));
     }
 

@@ -71,10 +71,12 @@ public class DeliveryService {
         } else throw new OrderNotFoundException("Your chosen no orders");
     }
 
-    public void giveCourierRole(User user) throws UnauthorizedUserException {
+    public void giveCourierRole(User user) throws UnauthorizedUserException, CourierAlreadyExistException {
         if (user == null) {
             throw new UnauthorizedUserException();
         }
+
+        if (courierRepository.getOne(user.getId()) != null) throw new CourierAlreadyExistException("You are already courier");
         Courier courier = new Courier();
         courier.setUser(user);
         courierRepository.save(courier);
