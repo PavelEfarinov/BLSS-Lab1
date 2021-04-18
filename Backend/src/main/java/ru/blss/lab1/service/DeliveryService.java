@@ -3,6 +3,7 @@ package ru.blss.lab1.service;
 import org.springframework.stereotype.Service;
 import ru.blss.lab1.domain.*;
 import ru.blss.lab1.domain.order.Order;
+import ru.blss.lab1.domain.order.OrderStatus;
 import ru.blss.lab1.exception.*;
 import ru.blss.lab1.repository.*;
 
@@ -47,7 +48,7 @@ public class DeliveryService {
         else throw new CourierAlreadyExistException("This order already has a courier");
     }
 
-    public void updateOrderStatus(long orderId, String status) throws OrderNotFoundException {
+    public void updateOrderStatus(long orderId, OrderStatus status) throws OrderNotFoundException {
         if (orderRepository.getOne(orderId) == null) throw new OrderNotFoundException("Order not found");
         orderRepository.updateOrderStatus(orderId, status);
     }

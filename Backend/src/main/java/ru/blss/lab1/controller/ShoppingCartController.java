@@ -25,6 +25,8 @@ public class ShoppingCartController extends ApiController {
         if (user == null) {
             throw new UnauthorizedUserException();
         }
+
+
         shoppingCartService.addItemToCart(user, item);
     }
 

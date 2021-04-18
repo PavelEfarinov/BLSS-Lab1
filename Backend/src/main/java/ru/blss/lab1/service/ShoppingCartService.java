@@ -40,10 +40,10 @@ public class ShoppingCartService {
                 storeItemInCart = new StoreItemInCart();
                 storeItemInCart.setItem(item);
                 storeItemInCart.setOwner(user);
-                storeItemInCart.setQuantity(0L);
             } else {
                 storeItemInCart = storeItemInCartResponse.get();
             }
+
             storeItemInCart.setQuantity(storeItemInCart.getQuantity() + 1);
             cartItemRepository.saveAndFlush(storeItemInCart);
         } else {

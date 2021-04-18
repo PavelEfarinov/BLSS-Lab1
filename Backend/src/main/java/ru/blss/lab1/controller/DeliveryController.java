@@ -58,7 +58,7 @@ public class DeliveryController extends ApiController {
         if (orderUpdate.getOrderStatus() == null) {
             throw new ValidationException("New order status should be provided");
         }
-        deliveryService.updateOrderStatus(orderUpdate.getId(), orderUpdate.getOrderStatus().name());
+        deliveryService.updateOrderStatus(orderUpdate.getId(), orderUpdate.getOrderStatus());
     }
 
 }

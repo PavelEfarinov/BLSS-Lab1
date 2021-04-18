@@ -1,8 +1,11 @@
 package ru.blss.lab1.domain;
 
+import ru.blss.lab1.domain.order.OrderStatus;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Entity
 @Table (name = "item_in_cart")
@@ -18,6 +21,10 @@ public class StoreItemInCart {
     private StoreItem item;
 
     private @NotNull @Min(1) Long quantity;
+
+    public StoreItemInCart(){
+        this.quantity = Long.valueOf(0);
+    }
 
     public @NotNull @Min(1) Long getQuantity() {
         return quantity;

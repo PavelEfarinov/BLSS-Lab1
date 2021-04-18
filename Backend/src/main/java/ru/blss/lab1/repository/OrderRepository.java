@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import ru.blss.lab1.domain.order.Order;
+import ru.blss.lab1.domain.order.OrderStatus;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query(value = "update Order o set o.orderStatus = :status where o.id = :id")
     @Modifying
     @Transactional
-    void updateOrderStatus(@Param("id") long id, @Param("status") String status);
+    void updateOrderStatus(@Param("id") long id, @Param("status") OrderStatus status);
 
     @Query(value = "select o from Order o where o.courier.id is not null")
     List<Order> getAllFreeOrders();
