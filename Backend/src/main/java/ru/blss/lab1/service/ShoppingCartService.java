@@ -32,7 +32,6 @@ public class ShoppingCartService {
         }
         if (available.get() > 0) {
             item = storeItemRepository.findById(item.getId()).get();
-            storeItemRepository.takeStoreItem(item.getId());
 
             Optional<StoreItemInCart> storeItemInCartResponse = cartItemRepository.getCartItemByCart(item.getId(), user.getId());
             StoreItemInCart storeItemInCart;
@@ -45,7 +44,7 @@ public class ShoppingCartService {
             }
 
             storeItemInCart.setQuantity(storeItemInCart.getQuantity() + 1);
-            cartItemRepository.saveAndFlush(storeItemInCart);
+            cartItemRepository.save(storeItemInCart);
         } else {
             throw new NoMoreItemException("No more items left in the store");
         }
@@ -65,8 +64,6 @@ public class ShoppingCartService {
         } else {
             cartItemRepository.delete(storeItemInCart);
         }
-
-        storeItemRepository.addStoreItem(item.getId());
     }
 
     public List<StoreItemInCart> getItemsInCart(User user)

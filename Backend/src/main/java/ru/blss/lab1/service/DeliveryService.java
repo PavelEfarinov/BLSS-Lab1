@@ -8,6 +8,7 @@ import ru.blss.lab1.exception.*;
 import ru.blss.lab1.repository.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,22 +19,27 @@ public class DeliveryService {
     private OrderRepository orderRepository;
     private OrderItemRepository orderItemRepository;
     private CartItemRepository cartItemRepository;
+    StoreItemRepository storeItemRepository;
 
-    public DeliveryService(CourierRepository courierRepository, DeliveryCarRepository deliveryCarRepository, OrderRepository orderRepository, OrderItemRepository orderItemRepository, CartItemRepository cartItemRepository) {
+
+    public DeliveryService(CourierRepository courierRepository, DeliveryCarRepository deliveryCarRepository, OrderRepository orderRepository, OrderItemRepository orderItemRepository, CartItemRepository cartItemRepository, StoreItemRepository storeItemRepository) {
         this.courierRepository = courierRepository;
         this.deliveryCarRepository = deliveryCarRepository;
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.cartItemRepository = cartItemRepository;
+        this.storeItemRepository = storeItemRepository;
     }
 
+    @Transactional
     public void addNewOrder(User user, Order order) throws CartItemNotFoundException {
         List<StoreItemInCart> storeItemInCarts = cartItemRepository.getCartItemByOwnerId(user.getId());
 
-        if (storeItemInCarts == null || !storeItemInCarts.isEmpty()) {
+        if (storeItemInCarts != null && !storeItemInCarts.isEmpty()) {
             order.setClient(user);
             orderRepository.save(order);
             for (StoreItemInCart item : storeItemInCarts) {
+                storeItemRepository.takeStoreItem(item.getItem().getId());
                 orderItemRepository.save(new OrderItem(item.getQuantity(), item.getItem(), order));
             }
 
@@ -41,6 +47,7 @@ public class DeliveryService {
         } else throw new CartItemNotFoundException("Your cart is empty.");
     }
 
+    @Transactional
     public void setOrderCourier(long courierId, long orderId) throws CourierAlreadyExistException {
         Order order = orderRepository.getOne(orderId);
         if (order.getCourier() == null)
@@ -48,11 +55,13 @@ public class DeliveryService {
         else throw new CourierAlreadyExistException("This order already has a courier");
     }
 
+    @Transactional
     public void updateOrderStatus(long orderId, OrderStatus status) throws OrderNotFoundException {
         if (orderRepository.getOne(orderId) == null) throw new OrderNotFoundException("Order not found");
         orderRepository.updateOrderStatus(orderId, status);
     }
 
+    @Transactional
     public void addDeliveryCarFlight(LocalDateTime begin, LocalDateTime end, long courierId, String address) throws NoPermissionException, OrderNotFoundException {
         DeliveryCarFlight deliveryCar = new DeliveryCarFlight();
         Courier courier = courierRepository.getOne(courierId);
