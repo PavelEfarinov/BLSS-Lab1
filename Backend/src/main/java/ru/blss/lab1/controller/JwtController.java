@@ -1,36 +1,33 @@
 package ru.blss.lab1.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import ru.blss.lab1.configs.JaasConfigs;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.blss.lab1.exception.UnauthorizedUserException;
 import ru.blss.lab1.exception.ValidationException;
 import ru.blss.lab1.form.UserCredentials;
 import ru.blss.lab1.form.UserRegisterCredentials;
-import ru.blss.lab1.form.validator.UserCredentialsEnterValidator;
-import ru.blss.lab1.security.CustomCallbackHandler;
-import ru.blss.lab1.service.JwtService;
+import ru.blss.lab1.jwt.JwtProvider;
 import ru.blss.lab1.service.SecurityService;
 import ru.blss.lab1.service.UserService;
 import ru.blss.lab1.util.BindingResultUtils;
 
-import javax.security.auth.Subject;
-import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1")
 public class JwtController extends ApiController {
-    private final JwtService jwtService;
-    private final UserService userService;
-    private final SecurityService securityService;
 
-    public JwtController(JwtService jwtService, UserService userService, SecurityService securityService) {
-        this.jwtService = jwtService;
-        this.userService = userService;
-        this.securityService = securityService;
-    }
+    @Autowired
+    private JwtProvider jwtProvider;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private SecurityService securityService;
 
     @PostMapping("login")
     public String login(@RequestBody UserCredentials userCredentials) throws UnauthorizedUserException, LoginException {
@@ -40,7 +37,7 @@ public class JwtController extends ApiController {
 
         securityService.login(userCredentials.getUsername(), userCredentials.getPassword());
 
-        return jwtService.create(userCredentials.getUsername(), userCredentials.getPassword());
+        return jwtProvider.generateToken(userCredentials.getUsername());
     }
 
 

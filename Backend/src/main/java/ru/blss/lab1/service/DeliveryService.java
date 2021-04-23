@@ -1,5 +1,6 @@
 package ru.blss.lab1.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.blss.lab1.domain.*;
 import ru.blss.lab1.domain.order.Order;
@@ -14,22 +15,18 @@ import java.util.List;
 
 @Service
 public class DeliveryService {
+    @Autowired
     private CourierRepository courierRepository;
+    @Autowired
     private DeliveryCarRepository deliveryCarRepository;
+    @Autowired
     private OrderRepository orderRepository;
+    @Autowired
     private OrderItemRepository orderItemRepository;
+    @Autowired
     private CartItemRepository cartItemRepository;
-    StoreItemRepository storeItemRepository;
-
-
-    public DeliveryService(CourierRepository courierRepository, DeliveryCarRepository deliveryCarRepository, OrderRepository orderRepository, OrderItemRepository orderItemRepository, CartItemRepository cartItemRepository, StoreItemRepository storeItemRepository) {
-        this.courierRepository = courierRepository;
-        this.deliveryCarRepository = deliveryCarRepository;
-        this.orderRepository = orderRepository;
-        this.orderItemRepository = orderItemRepository;
-        this.cartItemRepository = cartItemRepository;
-        this.storeItemRepository = storeItemRepository;
-    }
+    @Autowired
+    private StoreItemRepository storeItemRepository;
 
     @Transactional
     public void addNewOrder(User user, Order order) throws CartItemNotFoundException {
@@ -75,22 +72,11 @@ public class DeliveryService {
             deliveryCar.setArrivalTime(begin);
             deliveryCar.setDepartureTime(end);
 
-            for (Order ord: order) {
+            for (Order ord : order) {
                 orderRepository.updateAddress(ord.getId(), address);
             }
             deliveryCarRepository.save(deliveryCar);
         } else throw new OrderNotFoundException("Your chosen no order");
-    }
-
-    public void giveCourierRole(User user) throws UnauthorizedUserException, CourierAlreadyExistException {
-        if (user == null) {
-            throw new UnauthorizedUserException();
-        }
-
-        if (courierRepository.findById(user.getId()).isPresent()) throw new CourierAlreadyExistException("You are already courier");
-        Courier courier = new Courier();
-        courier.setUser(user);
-        courierRepository.save(courier);
     }
 
     public List<Order> getAssignedOrders(long id) throws NoPermissionException {

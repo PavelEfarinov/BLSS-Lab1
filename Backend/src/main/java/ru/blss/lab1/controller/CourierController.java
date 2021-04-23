@@ -1,29 +1,26 @@
 package ru.blss.lab1.controller;
 
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.blss.lab1.domain.order.Order;
 import ru.blss.lab1.domain.User;
+import ru.blss.lab1.domain.order.Order;
 import ru.blss.lab1.exception.*;
 import ru.blss.lab1.service.DeliveryService;
+import ru.blss.lab1.service.UserService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/courier")
 public class CourierController extends ApiController {
+    @Autowired
     private DeliveryService deliveryService;
 
-    public CourierController(DeliveryService deliveryService) {
-        this.deliveryService = deliveryService;
-    }
+    @Autowired
+    private UserService userService;
 
-    @PostMapping("courier")
-    public void upgradeToCourierRole(@ModelAttribute("user") User user) throws UnauthorizedUserException, CourierAlreadyExistException {
-        deliveryService.giveCourierRole(user);
-    }
-
-    @PostMapping("courier/order/choose")
+    @PostMapping("order/choose")
     public void chooseOrder(@RequestBody Order orderInfo, @ModelAttribute("user") User user) throws UnauthorizedUserException, CourierAlreadyExistException {
         if (user == null) {
             throw new UnauthorizedUserException();
@@ -31,7 +28,7 @@ public class CourierController extends ApiController {
         deliveryService.setOrderCourier(user.getId(), orderInfo.getId());
     }
 
-    @PostMapping("courier/flight/new")
+    @PostMapping("flight/new")
     public void addNewCarFlight(@RequestBody FlightInfoDTO flightInfo, @ModelAttribute("user") User user) throws UnauthorizedUserException, NoPermissionException, OrderNotFoundException {
 
         if (flightInfo.getAddress() == null || flightInfo.getAddress().isEmpty()) {
@@ -50,33 +47,10 @@ public class CourierController extends ApiController {
         deliveryService.addDeliveryCarFlight(flightInfo.getBegin(), flightInfo.getEnd(), user.getId(), flightInfo.getAddress());
     }
 
+    @Data
     static class FlightInfoDTO {
         private String address;
         private LocalDateTime begin;
         private LocalDateTime end;
-
-        public LocalDateTime getBegin() {
-            return begin;
-        }
-
-        public void setBegin(LocalDateTime begin) {
-            this.begin = begin;
-        }
-
-        public LocalDateTime getEnd() {
-            return end;
-        }
-
-        public void setEnd(LocalDateTime end) {
-            this.end = end;
-        }
-
-        public String getAddress() {
-            return address;
-        }
-
-        public void setAddress(String address) {
-            this.address = address;
-        }
     }
 }

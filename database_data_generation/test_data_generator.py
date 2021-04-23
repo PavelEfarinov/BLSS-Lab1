@@ -10,7 +10,9 @@ try:
 
     print('generating more data.')
     dfi = DatabaseFunctionsInvoker(connection)
+    dfi.create_base_roles()
     dfi.create_test_user()
+    dfi.create_admin()
     for i in range(50):
         user = dfi.create_base_user()
         dfi.create_store_item()
