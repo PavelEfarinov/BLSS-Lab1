@@ -8,11 +8,18 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.blss.lab1.exception.*;
 
+import javax.security.auth.login.LoginException;
+
 @ControllerAdvice
 public class RestControllerExceptionHandler {
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Object> handleValidationException(Exception e) {
         return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(LoginException.class)
+    public ResponseEntity<Object> handleLoginException(Exception e) {
+        return new ResponseEntity<>("Incorrect username or password", new HttpHeaders(), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler({NoSuchResourceException.class, CartItemNotFoundException.class, OrderNotFoundException.class})
