@@ -12,18 +12,15 @@ import ru.blss.lab1.repository.RoleRepository;
 @Service
 
 public class RoleService {
-    @Autowired
-    private CourierRepository courierRepository;
-    @Autowired
-    private RoleRepository roleRepository;
+    private final CourierRepository courierRepository;
+    private final RoleRepository roleRepository;
 
-    public void giveCourierRole(User user) throws UnauthorizedUserException, CourierAlreadyExistException {
-        if (user == null) {
-            throw new UnauthorizedUserException();
-        }
+    public RoleService(CourierRepository courierRepository, RoleRepository roleRepository) {
+        this.courierRepository = courierRepository;
+        this.roleRepository = roleRepository;
+    }
 
-        if (courierRepository.findById(user.getId()).isPresent())
-            throw new CourierAlreadyExistException("You are already courier");
+    public void giveCourierRole(User user)  {
         if (!user.getUserRole().equals(roleRepository.findByName("ROLE_ADMIN").get())) {
             user.setUserRole(roleRepository.findByName("ROLE_COURIER").get());
         }

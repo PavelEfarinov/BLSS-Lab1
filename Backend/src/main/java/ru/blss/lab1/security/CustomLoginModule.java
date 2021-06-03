@@ -62,7 +62,6 @@ public class CustomLoginModule implements LoginModule {
             e.printStackTrace();
         }
 
-
         return loginSucceeded;
     }
 

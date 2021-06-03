@@ -1,6 +1,5 @@
 package ru.blss.lab1.configs.kafka;
 
-import com.fasterxml.jackson.databind.JsonSerializer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.LongSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +10,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.converter.StringJsonMessageConverter;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 import ru.blss.lab1.domain.order.Order;
 
 import java.util.HashMap;
