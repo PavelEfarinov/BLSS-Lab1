@@ -1,9 +1,12 @@
 package ru.blss.lab1.domain;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 
 @Entity
+@Data
 @Table(name = "courier")
 public class Courier {
 

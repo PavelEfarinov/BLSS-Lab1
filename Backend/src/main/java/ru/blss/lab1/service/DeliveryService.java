@@ -29,7 +29,7 @@ public class DeliveryService {
     private StoreItemRepository storeItemRepository;
 
     @Transactional
-    public void addNewOrder(User user, Order order) throws CartItemNotFoundException {
+    public long addNewOrder(User user, Order order) throws CartItemNotFoundException {
         List<StoreItemInCart> storeItemInCarts = cartItemRepository.getCartItemByOwnerId(user.getId());
 
         if (storeItemInCarts != null && !storeItemInCarts.isEmpty()) {
@@ -41,6 +41,7 @@ public class DeliveryService {
             }
 
             cartItemRepository.deleteAllByOwnerId(user.getId());
+            return order.getId();
         } else throw new CartItemNotFoundException("Your cart is empty.");
     }
 

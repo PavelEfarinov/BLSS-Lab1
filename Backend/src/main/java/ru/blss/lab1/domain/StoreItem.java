@@ -1,12 +1,14 @@
 package ru.blss.lab1.domain;
 
 import com.sun.istack.NotNull;
+import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 @Entity
+@Data
 @Table(name = "store_item")
 public class StoreItem {
     @Id
