@@ -17,6 +17,6 @@ public class QuartzSubmitJobs {
     @Bean(name = "dropUnpaidTrigger")
     public SimpleTriggerFactoryBean triggerMemberStats(@Qualifier("dropUnpaid") JobDetail jobDetail) {
 //        return QuartzConfig.createTrigger(jobDetail, 86400000, "Remove unpaid Trigger");
-        return QuartzConfig.createTrigger(jobDetail, 5000, "Remove unpaid Trigger");
+        return QuartzConfig.createTrigger(jobDetail, 15000, "Remove unpaid Trigger");
     }
 }

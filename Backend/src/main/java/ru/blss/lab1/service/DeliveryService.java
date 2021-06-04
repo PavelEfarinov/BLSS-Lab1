@@ -1,11 +1,15 @@
 package ru.blss.lab1.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.blss.lab1.domain.*;
 import ru.blss.lab1.domain.order.Order;
 import ru.blss.lab1.domain.order.OrderStatus;
-import ru.blss.lab1.exception.*;
+import ru.blss.lab1.exception.CartItemNotFoundException;
+import ru.blss.lab1.exception.CourierAlreadyExistException;
+import ru.blss.lab1.exception.NoPermissionException;
+import ru.blss.lab1.exception.OrderNotFoundException;
 import ru.blss.lab1.repository.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -14,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@Slf4j
 public class DeliveryService {
     @Autowired
     private CourierRepository courierRepository;
@@ -78,6 +83,16 @@ public class DeliveryService {
             }
             deliveryCarRepository.save(deliveryCar);
         } else throw new OrderNotFoundException("Your chosen no order");
+    }
+
+    @Transactional
+    public void RemoveAllUnpaid() {
+        List<Order> orders = orderRepository.getAllNewUnpaidOrders();
+        for (Order order : orders) {
+            log.info(String.valueOf(orderItemRepository.getAllForOrder(order)));
+            orderItemRepository.deleteAll(orderItemRepository.getAllForOrder(order));
+        }
+        orderRepository.deleteAll(orders);
     }
 
     public List<Order> getAssignedOrders(long id) throws NoPermissionException {

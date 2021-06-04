@@ -2,6 +2,7 @@ package ru.blss.lab1.configs.quartz;
 
 import org.quartz.JobDetail;
 import org.quartz.SimpleTrigger;
+import org.quartz.Trigger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,12 +24,13 @@ public class QuartzConfig {
     }
 
     @Bean
-    public SchedulerFactoryBean scheduler() {
+    public SchedulerFactoryBean scheduler(Trigger ...triggers) {
         SchedulerFactoryBean schedulerFactory = new SchedulerFactoryBean();
         schedulerFactory.setOverwriteExistingJobs(true);
         schedulerFactory.setAutoStartup(true);
         schedulerFactory.setJobFactory(springBeanJobFactory());
         schedulerFactory.setWaitForJobsToCompleteOnShutdown(true);
+        schedulerFactory.setTriggers(triggers);
         return schedulerFactory;
     }
 

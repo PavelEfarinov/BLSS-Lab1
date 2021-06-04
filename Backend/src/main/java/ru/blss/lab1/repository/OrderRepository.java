@@ -32,6 +32,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query(value = "select o from Order o where o.courier.id is not null")
     List<Order> getAllFreeOrders();
 
+    @Query(value = "select o from Order o where o.paymentStatus = 'PENDING' and o.orderStatus = 'FORMED'")
+    List<Order> getAllNewUnpaidOrders();
+
     @Query(value = "select o from Order o where o.courier.id = ?1")
     List<Order> getAssignedOrders(long id);
 }
