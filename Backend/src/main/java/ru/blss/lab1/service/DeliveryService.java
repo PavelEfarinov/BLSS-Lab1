@@ -6,10 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.blss.lab1.domain.*;
 import ru.blss.lab1.domain.order.Order;
 import ru.blss.lab1.domain.order.OrderStatus;
-import ru.blss.lab1.exception.CartItemNotFoundException;
-import ru.blss.lab1.exception.CourierAlreadyExistException;
-import ru.blss.lab1.exception.NoPermissionException;
-import ru.blss.lab1.exception.OrderNotFoundException;
+import ru.blss.lab1.exception.*;
 import ru.blss.lab1.repository.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -34,14 +31,21 @@ public class DeliveryService {
     private StoreItemRepository storeItemRepository;
 
     @Transactional
-    public long addNewOrder(User user, Order order) throws CartItemNotFoundException {
+    public long addNewOrder(User user, Order order) throws CartItemNotFoundException, NoMoreItemException {
         List<StoreItemInCart> storeItemInCarts = cartItemRepository.getCartItemByOwnerId(user.getId());
 
         if (storeItemInCarts != null && !storeItemInCarts.isEmpty()) {
+
+            for (StoreItemInCart item : storeItemInCarts) {
+                if (storeItemRepository.getCurrentlyAvailableById(item.getItem().getId()).get() < item.getQuantity()) {
+                    throw new NoMoreItemException("Not enough items to form order");
+                }
+            }
+
             order.setClient(user);
             orderRepository.save(order);
             for (StoreItemInCart item : storeItemInCarts) {
-                storeItemRepository.takeStoreItem(item.getItem().getId());
+                storeItemRepository.takeStoreItemQuantity(item.getItem().getId(), item.getQuantity());
                 orderItemRepository.save(new OrderItem(item.getQuantity(), item.getItem(), order));
             }
 
@@ -90,7 +94,11 @@ public class DeliveryService {
         List<Order> orders = orderRepository.getAllNewUnpaidOrders();
         for (Order order : orders) {
             log.info(String.valueOf(orderItemRepository.getAllForOrder(order)));
-            orderItemRepository.deleteAll(orderItemRepository.getAllForOrder(order));
+            List<OrderItem> items = orderItemRepository.getAllForOrder(order);
+            for (OrderItem item : items) {
+                storeItemRepository.addStoreItemQuantity(item.getStoreItem().getId(), item.getQuantity());
+                orderItemRepository.delete(item);
+            }
         }
         orderRepository.deleteAll(orders);
     }

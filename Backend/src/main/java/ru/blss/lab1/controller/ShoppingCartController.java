@@ -71,7 +71,7 @@ public class ShoppingCartController extends ApiController {
     }
 
     @PostMapping("order")
-    public long addNewOrder(@RequestBody Order orderInfo, @ModelAttribute("user") User user) throws CartItemNotFoundException, UnauthorizedUserException {
+    public long addNewOrder(@RequestBody Order orderInfo, @ModelAttribute("user") User user) throws CartItemNotFoundException, UnauthorizedUserException, NoMoreItemException {
         if(orderInfo.getAddress() == null || orderInfo.getAddress().isEmpty())
         {
             throw new ValidationException("Order address should be provided");

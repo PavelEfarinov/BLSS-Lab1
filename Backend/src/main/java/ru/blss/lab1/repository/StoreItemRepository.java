@@ -20,4 +20,13 @@ public interface StoreItemRepository extends JpaRepository<StoreItem, Long> {
     @Query(value = "update StoreItem s set s.currentlyAvailable = s.currentlyAvailable + 1 where s.id = ?1")
     @Modifying
     void addStoreItem(long id);
+
+    @Query(value = "update StoreItem s set s.currentlyAvailable = s.currentlyAvailable - ?2 where s.id = ?1 ")
+    @Modifying
+    void takeStoreItemQuantity(long id, long quantity);
+
+    @Query(value = "update StoreItem s set s.currentlyAvailable = s.currentlyAvailable + ?2 where s.id = ?1")
+    @Modifying
+    void addStoreItemQuantity(long id, long quantity);
+
 }
